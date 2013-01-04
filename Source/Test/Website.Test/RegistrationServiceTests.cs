@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Dynamic;
+using System.Net;
 using NUnit.Framework;
 using Rhino.Mocks;
+using ServiceStack.Common.Web;
 using Website.App;
 using Website.Services;
 
@@ -14,10 +17,13 @@ namespace Website.Test
         private RegistrationService _sut;
         private Registration _request;
         private RegistrationResult _response;
+        private dynamic _testContext;
 
         [SetUp]
         public void SetUp()
         {
+            _testContext = new ExpandoObject();
+            _testContext.Exception = null;
             _guidFactory = MockRepository.GenerateMock<IGuidFactory>();
             _registrationRepository = MockRepository.GenerateMock<IRegistrationRepository>();
             _sut = new RegistrationService(_guidFactory, _registrationRepository);
@@ -41,6 +47,28 @@ namespace Website.Test
             then_the_repository_should_have_saved("jimmy@codalicio.us", "e903fc3f-7022-4e50-868f-8bda9c448472");
         }
 
+        [Test]
+        public void it_should_throw_an_exception_if_email_is_already_registered()
+        {
+            given_there_is_already_a_registration_for_email("jimmy@codalicio.us");
+            and_the_registration_has_an_email("jimmy@codalicio.us");
+            when_the_request_is_posted_to_the_service();
+            then_an_excpetion_should_have_been_thrown(HttpStatusCode.Conflict);
+        }
+
+        private void then_an_excpetion_should_have_been_thrown(HttpStatusCode statusCode)
+        {
+            var exception = (HttpError)_testContext.Exception;
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception, Is.TypeOf<HttpError>());
+            Assert.That(exception.StatusCode, Is.EqualTo(statusCode));
+        }
+
+        private void given_there_is_already_a_registration_for_email(string email)
+        {
+            _registrationRepository.Stub(r => r.FindByEmail(email)).Return("e903fc3f-7022-4e50-868f-8bda9c448472");
+        }
+
         private void then_the_repository_should_have_saved(string email, string guid)
         {
             _registrationRepository.AssertWasCalled(r => r.Add(email, guid));
@@ -58,7 +86,14 @@ namespace Website.Test
 
         private void when_the_request_is_posted_to_the_service()
         {
-            _response = (RegistrationResult)_sut.Post(_request);
+            try
+            {
+                _response = (RegistrationResult)_sut.Post(_request);
+            }
+            catch (Exception e)
+            {
+                _testContext.Exception = e;
+            }
         }
 
         private void given_the_guid_factory_will_create_a_guid(string guid)

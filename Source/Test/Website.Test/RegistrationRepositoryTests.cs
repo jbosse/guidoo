@@ -19,7 +19,8 @@ namespace Website.Test
         {
             _session = new Session();
             _testContext = new ExpandoObject();
-            _sut = new RegistrationRepository(_session);
+            _sut = new RegistrationRepository();
+            ((RegistrationRepository)_sut).Session = _session;
         }
 
         [Test]

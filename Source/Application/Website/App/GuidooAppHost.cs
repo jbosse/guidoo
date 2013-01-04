@@ -11,8 +11,11 @@ namespace Website.App
 
         public override void Configure(Funq.Container container)
         {
-            Plugins.Add(new ValidationFeature());
-            container.RegisterValidators(typeof (Global).Assembly);
+            container.RegisterAutoWiredAs<RegistrationRepository, IRegistrationRepository>();
+            container.RegisterAutoWiredAs<GuidFactory, IGuidFactory>();
+
+            //Plugins.Add(new ValidationFeature());
+            //container.RegisterValidators(typeof (Global).Assembly);
         }
     }
 }

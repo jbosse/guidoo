@@ -1,28 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ServiceStack.CacheAccess;
 
 namespace Website.App
 {
     public class RegistrationRepository : IRegistrationRepository
     {
-        private readonly ISession _session;
-        private readonly List<RegistrationDocument> _regisrations;
-
-        public RegistrationRepository(ISession session)
+        private List<RegistrationDocument> Regisrations
         {
-            _session = session;
-            _regisrations = _session.Get<List<RegistrationDocument>>("registration") ?? new List<RegistrationDocument>();
+            get
+            {
+                var reg = Session.Get<List<RegistrationDocument>>("registration");
+                return reg ?? new List<RegistrationDocument>();
+            }
         }
+
+        public ISession Session { get; set; }
 
         public void Add(string email, string guid)
         {
-            _regisrations.Add(new RegistrationDocument {Email = email, Guid = guid});
-            _session.Set("registration", _regisrations);
+            var reg = Regisrations;
+            reg.Add(new RegistrationDocument {Email = email, Guid = guid});
+            Session.Set("registration", reg);
         }
 
         public string FindByEmail(string email)
         {
-            return _regisrations.Find(r => r.Email == email).Guid;
+            var registrationDocument = Regisrations.Find(r => r.Email == email);
+            return registrationDocument == null ? null : registrationDocument.Guid;
         }
     }
 }

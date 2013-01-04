@@ -115,7 +115,6 @@
     <Compile Include="App\Registration.cs" />
     <Compile Include="App\RegistrationRepository.cs" />
     <Compile Include="App\RegistrationResult.cs" />
-    <Compile Include="App\RegistrationValidator.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
