@@ -1,0 +1,92 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>guidoo&#0153;: register</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link href="css/bootstrap.css" rel="stylesheet">
+        <link href="css/guidoo.css" rel="stylesheet">
+        <link href="css/bootstrap-responsive.css" rel="stylesheet">
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <!-- Fav and touch icons -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="/ico/apple-touch-icon-57-precomposed.png">
+        <link rel="shortcut icon" href="/ico/favicon.png">
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="#">guidoo.me</a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                            <li class="active"><a href="index.html">Home</a></li>
+                            <!--<li><a href="#about">About</a></li>
+                            <li><a href="#contact">Contact</a></li>-->
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+        <div class="jumbotron">
+            <div class="container">
+                <!-- Main hero unit for a primary marketing message or call to action -->
+                <h1 id="hero_title">register</h1>
+                <p id="confirm_message" style="display:none">Congratulations! Here is your globally unique identifier.</p>
+                <p id="already_message" style="display:none">Oh Noes! This email has already been registered.</p>
+                <p><input type="text" id="email" class="input-block-level" placeholder="Email Address"/></p>
+                <p><a id="register_button" class="btn btn-primary btn-large">Register</a></p>
+            </div>
+        </div>
+        <div class="container">
+            <hr>
+            <footer>
+                <p>&copy;2012 codalicio.us all rights reserved</p>
+            </footer>
+        </div>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="/js/bootstrap.js"></script>
+        <script>
+            (function($, window, undefined) {
+                $(function() {
+                    $('#register_button').on('click', null, function () {
+                        $('#register_button').hide();
+                        var email = $('#email').hide().val();
+                        $.ajax({
+                            url: 'registration',
+                            data: JSON.stringify({ Email: email }),
+                            type: 'POST',
+                            contentType: 'application/json, charset=utf-8',
+                            dataType: 'json'
+                        }).
+                            done(function(result) {
+                                $('#hero_title').text(result.Guid).addClass('registered');
+                                $('#confirm_message').show();
+                                $('#already_message').hide();
+                            }).
+                            fail(function(result) {
+                                var response = JSON.parse(result.responseText);
+                                $('#email').show().focus().select();
+                                $('#confirm_message').hide();
+                                $('#already_message').show();
+                                $('#register_button').show();
+                            });
+                    });
+                });
+            })(jQuery, window);
+        </script>
+    </body>
+</html>

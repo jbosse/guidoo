@@ -5,7 +5,7 @@ namespace Website.App
 {
     public class RegistrationResult
     {
-        public Guid Guid { get; set; }
+        public string Guid { get; set; }
         public ResponseStatus ResponseStatus { get; set; }
     }
 }

@@ -22,8 +22,8 @@ namespace Website.Services
             {
                 throw new HttpError(HttpStatusCode.Conflict, "The email is already registered.");
             }
-            var guid = _guidFactory.Create();
-            _registrationRepository.Add(registration.Email, guid.ToString());
+            var guid = _guidFactory.Create().ToString("D");
+            _registrationRepository.Add(registration.Email, guid);
             return new RegistrationResult { Guid = guid };
         }
 

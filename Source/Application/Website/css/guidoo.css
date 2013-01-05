@@ -115,3 +115,13 @@ footer {
   }
 
 }
+
+h1.registered {
+    font-size: 48px;
+    letter-spacing: 0px;
+}
+
+#email {
+    width: 30%;
+    text-align: center;
+}

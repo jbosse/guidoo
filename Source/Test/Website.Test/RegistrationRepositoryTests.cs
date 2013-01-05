@@ -44,7 +44,7 @@ namespace Website.Test
 
         private void then_it_should_return_the_guid(string guid)
         {
-            Assert.That(_testContext.Result.ToString(), Is.EqualTo(guid));
+            Assert.That(_testContext.Result, Is.EqualTo(guid));
         }
 
         private void when_the_repository_is_searched_for_the_email(string email)

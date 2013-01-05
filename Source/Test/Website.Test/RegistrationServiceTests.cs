@@ -88,7 +88,7 @@ namespace Website.Test
 
         private void then_the_response_should_have_the_guid(string guid)
         {
-            Assert.That(_response.Guid.ToString(), Is.EqualTo(guid));
+            Assert.That(_response.Guid, Is.EqualTo(guid));
         }
 
         private void when_the_request_is_posted_to_the_service()
