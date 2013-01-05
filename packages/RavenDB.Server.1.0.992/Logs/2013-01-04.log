@@ -7252,3 +7252,380 @@ select new { Email = doc.Email }
 2013-01-04 22:11:38.0140,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 21 because: WORK BY IndexingExecuter,
 2013-01-04 22:11:38.0140,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 21, for: IndexingExecuter, will wait for additional work",
 2013-01-04 22:11:38.0140,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 21, for: ReducingExecuter, will wait for additional work",
+time,logger,level,message,exception
+2013-01-04 22:15:28.3062,Raven.Database.Impl.DocumentCacher,Info,"MemoryCache Settings:
+  PhysicalMemoryLimit = 98
+  CacheMemoryLimit    = 1072693248
+  PollingInterval     = 00:02:00",
+2013-01-04 22:15:28.3579,Raven.Storage.Esent.TransactionalStorage,Info,"Esent Settings:
+  MaxVerPages      = 32768
+  CacheSizeMax     = 262144
+  DatabasePageSize = 4096",
+2013-01-04 22:15:30.6915,Raven.Database.Storage.IndexDefinitionStorage,Info,"New index Raven%2fDocumentsByEntityName:
+using Raven.Abstractions;
+using Raven.Database.Linq;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
+using System;
+using Raven.Database.Linq.PrivateExtensions;
+using Lucene.Net.Documents;
+using System.Globalization;
+using Raven.Database.Indexing;
+public class Index_Raven_2fDocumentsByEntityName : AbstractViewGenerator
+{
+	public Index_Raven_2fDocumentsByEntityName()
+	{
+		this.ViewText = @""from doc in docs 
+let Tag = doc[""""@metadata""""][""""Raven-Entity-Name""""]
+select new { Tag, LastModified = (DateTime)doc[""""@metadata""""][""""Last-Modified""""] };
+"";
+		this.AddMapDefinition(docs => from doc in docs
+			let Tag = doc[""@metadata""][""Raven-Entity-Name""]
+			select new { Tag, LastModified = (DateTime)doc[""@metadata""][""Last-Modified""], __document_id = doc.__document_id });
+		this.AddField(""LastModified"");
+		this.AddField(""__document_id"");
+		this.AddField(""Tag"");
+		this.AddQueryParameterForMap(""__document_id"");
+		this.AddQueryParameterForReduce(""__document_id"");
+	}
+}
+
+Compiled to:
+using Raven.Abstractions;
+using Raven.Database.Linq;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
+using System;
+using Raven.Database.Linq.PrivateExtensions;
+using Lucene.Net.Documents;
+using System.Globalization;
+using Raven.Database.Indexing;
+public class Index_Raven_2fDocumentsByEntityName : AbstractViewGenerator
+{
+	public Index_Raven_2fDocumentsByEntityName()
+	{
+		this.ViewText = @""from doc in docs 
+let Tag = doc[""""@metadata""""][""""Raven-Entity-Name""""]
+select new { Tag, LastModified = (DateTime)doc[""""@metadata""""][""""Last-Modified""""] };
+"";
+		this.AddMapDefinition(docs => from doc in docs
+			let Tag = doc[""@metadata""][""Raven-Entity-Name""]
+			select new { Tag, LastModified = (DateTime)doc[""@metadata""][""Last-Modified""], __document_id = doc.__document_id });
+		this.AddField(""LastModified"");
+		this.AddField(""__document_id"");
+		this.AddField(""Tag"");
+		this.AddQueryParameterForMap(""__document_id"");
+		this.AddQueryParameterForReduce(""__document_id"");
+	}
+}
+",
+2013-01-04 22:15:30.8399,Raven.Database.Storage.IndexDefinitionStorage,Info,"New index Temp%2fRegistrationDocuments%2fByEmail:
+using Raven.Abstractions;
+using Raven.Database.Linq;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
+using System;
+using Raven.Database.Linq.PrivateExtensions;
+using Lucene.Net.Documents;
+using System.Globalization;
+using Raven.Database.Indexing;
+public class Index_Temp_2fRegistrationDocuments_2fByEmail : AbstractViewGenerator
+{
+	public Index_Temp_2fRegistrationDocuments_2fByEmail()
+	{
+		this.ViewText = @""from doc in docs.RegistrationDocuments
+select new { Email = doc.Email }
+"";
+		this.ForEntityNames.Add(""RegistrationDocuments"");
+		this.AddMapDefinition(docs => from doc in docs
+			where doc[""@metadata""][""Raven-Entity-Name""] == ""RegistrationDocuments""
+			select new { Email = doc.Email, __document_id = doc.__document_id });
+		this.AddField(""Email"");
+		this.AddField(""__document_id"");
+		this.AddQueryParameterForMap(""Email"");
+		this.AddQueryParameterForMap(""__document_id"");
+		this.AddQueryParameterForReduce(""Email"");
+		this.AddQueryParameterForReduce(""__document_id"");
+	}
+}
+
+Compiled to:
+using Raven.Abstractions;
+using Raven.Database.Linq;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
+using System;
+using Raven.Database.Linq.PrivateExtensions;
+using Lucene.Net.Documents;
+using System.Globalization;
+using Raven.Database.Indexing;
+public class Index_Temp_2fRegistrationDocuments_2fByEmail : AbstractViewGenerator
+{
+	public Index_Temp_2fRegistrationDocuments_2fByEmail()
+	{
+		this.ViewText = @""from doc in docs.RegistrationDocuments
+select new { Email = doc.Email }
+"";
+		this.ForEntityNames.Add(""RegistrationDocuments"");
+		this.AddMapDefinition(docs => from doc in docs
+			where doc[""@metadata""][""Raven-Entity-Name""] == ""RegistrationDocuments""
+			select new { Email = doc.Email, __document_id = doc.__document_id });
+		this.AddField(""Email"");
+		this.AddField(""__document_id"");
+		this.AddQueryParameterForMap(""Email"");
+		this.AddQueryParameterForMap(""__document_id"");
+		this.AddQueryParameterForReduce(""Email"");
+		this.AddQueryParameterForReduce(""__document_id"");
+	}
+}
+",
+2013-01-04 22:15:30.8623,Raven.Database.Indexing.IndexStorage.Startup,Debug,Loading saved index Raven/DocumentsByEntityName,
+2013-01-04 22:15:30.8926,Raven.Database.Indexing.IndexStorage.Startup,Warn,"Unclean shutdown detected on Raven/DocumentsByEntityName, checking the index for errors. This may take a while.",
+2013-01-04 22:15:31.1532,Raven.Database.Indexing.IndexStorage.Startup,Warn,"Checking index Raven/DocumentsByEntityName took: 00:00:00.2201751, clean: True",
+2013-01-04 22:15:31.1551,Raven.Database.Indexing.IndexStorage,Warn,,
+2013-01-04 22:15:31.1766,Raven.Database.Indexing.Index.Indexing,Debug,Creating index for Raven/DocumentsByEntityName,
+2013-01-04 22:15:31.1893,Raven.Database.Indexing.IndexStorage.Startup,Debug,Loading saved index Temp/RegistrationDocuments/ByEmail,
+2013-01-04 22:15:31.3416,Raven.Database.Indexing.Index.Indexing,Debug,Creating index for Temp/RegistrationDocuments/ByEmail,
+2013-01-04 22:15:31.3923,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'Raven/Backup/Status' was not found,
+2013-01-04 22:15:31.4919,Raven.Database.Indexing.IndexStorage,Info,Deleting index Temp/RegistrationDocuments/ByEmail,
+2013-01-04 22:15:31.5016,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 1 because: DELETE INDEX Temp/RegistrationDocuments/ByEmail,
+2013-01-04 22:15:31.5514,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 1, for: ReducingExecuter, will wait for additional work",
+2013-01-04 22:15:31.5631,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 1, for: IndexingExecuter, will wait for additional work",
+2013-01-04 22:15:38.1600,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'Raven/Replication/Destinations' was not found,
+2013-01-04 22:15:38.1600,Raven.Database.Server.HttpServer,Debug,Request #   1: GET     -    31 ms - <default>  - 404 - /docs/Raven/Replication/Destinations,
+2013-01-04 22:15:38.1883,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'Raven/Hilo/RegistrationDocuments' was found,
+2013-01-04 22:15:38.2488,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'Raven/ServerPrefixForHilo' was not found,
+2013-01-04 22:15:38.3220,Raven.Database.Server.HttpServer,Debug,Request #   2: GET     -   154 ms - <default>  - 200 - /queries/?&id=Raven/Hilo/RegistrationDocuments&id=Raven/ServerPrefixForHilo,
+2013-01-04 22:15:38.5435,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,"Inserted a new document with key 'Raven/Hilo/RegistrationDocuments', update: True, ",
+2013-01-04 22:15:38.5457,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 2 because: PUT Raven/Hilo/RegistrationDocuments,
+2013-01-04 22:15:38.5457,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 2, for: ReducingExecuter, will wait for additional work",
+2013-01-04 22:15:38.5457,Raven.Database.DocumentDatabase,Debug,Put document Raven/Hilo/RegistrationDocuments with etag 00000000-0000-0800-0000-000000000001,
+2013-01-04 22:15:38.5457,Raven.Database.Server.HttpServer,Debug,Request #   3: PUT     -   104 ms - <default>  - 201 - /docs/Raven/Hilo/RegistrationDocuments,
+2013-01-04 22:15:38.6353,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,Found a total of 1 documents that requires indexing since etag: 00000000-0000-0700-0000-000000000006,
+2013-01-04 22:15:38.6899,Raven.Database.Impl.DocumentRetriever,Debug,Triggered Raven.Database.Plugins.Builtins.FilterRavenInternalDocumentsReadTrigger asked us to ignore Raven/Hilo/RegistrationDocuments,
+2013-01-04 22:15:38.6899,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"After read triggers executed, 0 documents remained",
+2013-01-04 22:15:38.7124,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"All documents have been filtered for Raven/DocumentsByEntityName, no indexing will be performed, updating to 00000000-0000-0800-0000-000000000001, 1/5/2013 3:15:38 AM",
+2013-01-04 22:15:38.7202,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 3 because: WORK BY IndexingExecuter,
+2013-01-04 22:15:38.7202,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 3, for: ReducingExecuter, will wait for additional work",
+2013-01-04 22:15:38.7329,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 3, for: IndexingExecuter, will wait for additional work",
+2013-01-04 22:15:38.8354,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,"Inserted a new document with key 'RegistrationDocuments/2049', update: False, ",
+2013-01-04 22:15:38.8354,Raven.Database.DocumentDatabase,Debug,Put document RegistrationDocuments/2049 with etag 00000000-0000-0800-0000-000000000002,
+2013-01-04 22:15:38.8354,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 4 because: PUT RegistrationDocuments/2049,
+2013-01-04 22:15:38.8354,Raven.Database.DocumentDatabase,Debug,Successfully executed 1 commands in 00:00:00.0109670,
+2013-01-04 22:15:38.8656,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,Found a total of 1 documents that requires indexing since etag: 00000000-0000-0800-0000-000000000001,
+2013-01-04 22:15:38.8746,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 4, for: ReducingExecuter, will wait for additional work",
+2013-01-04 22:15:38.8656,Raven.Database.Server.HttpServer,Debug,Request #   4: POST    -    59 ms - <default>  - 200 - /bulk_docs,
+2013-01-04 22:15:38.8746,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'Raven/Replication/Destinations' was not found,
+2013-01-04 22:15:38.8746,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"After read triggers executed, 1 documents remained",
+2013-01-04 22:15:38.8746,Raven.Database.Server.HttpServer,Debug,"	PUT RegistrationDocuments/2049
+",
+2013-01-04 22:15:38.8746,Raven.Database.Server.HttpServer,Debug,Request #   5: GET     -     1 ms - <default>  - 404 - /docs/Raven/Replication/Destinations,
+2013-01-04 22:15:38.8746,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"Going to index 1 documents in IndexName: Raven/DocumentsByEntityName, LastIndexedEtag: 00000000-0000-0800-0000-000000000001",
+2013-01-04 22:15:38.8939,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,Indexing 1 documents for index: Raven/DocumentsByEntityName. (RegistrationDocuments/2049),
+2013-01-04 22:15:39.1682,Raven.Database.Storage.IndexDefinitionStorage,Info,"New index Temp%2fRegistrationDocuments%2fByEmail:
+using Raven.Abstractions;
+using Raven.Database.Linq;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
+using System;
+using Raven.Database.Linq.PrivateExtensions;
+using Lucene.Net.Documents;
+using System.Globalization;
+using Raven.Database.Indexing;
+public class Index_Temp_2fRegistrationDocuments_2fByEmail : AbstractViewGenerator
+{
+	public Index_Temp_2fRegistrationDocuments_2fByEmail()
+	{
+		this.ViewText = @""from doc in docs.RegistrationDocuments
+select new { Email = doc.Email }
+"";
+		this.ForEntityNames.Add(""RegistrationDocuments"");
+		this.AddMapDefinition(docs => from doc in docs
+			where doc[""@metadata""][""Raven-Entity-Name""] == ""RegistrationDocuments""
+			select new { Email = doc.Email, __document_id = doc.__document_id });
+		this.AddField(""Email"");
+		this.AddField(""__document_id"");
+		this.AddQueryParameterForMap(""Email"");
+		this.AddQueryParameterForMap(""__document_id"");
+		this.AddQueryParameterForReduce(""Email"");
+		this.AddQueryParameterForReduce(""__document_id"");
+	}
+}
+
+Compiled to:
+using Raven.Abstractions;
+using Raven.Database.Linq;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
+using System;
+using Raven.Database.Linq.PrivateExtensions;
+using Lucene.Net.Documents;
+using System.Globalization;
+using Raven.Database.Indexing;
+public class Index_Temp_2fRegistrationDocuments_2fByEmail : AbstractViewGenerator
+{
+	public Index_Temp_2fRegistrationDocuments_2fByEmail()
+	{
+		this.ViewText = @""from doc in docs.RegistrationDocuments
+select new { Email = doc.Email }
+"";
+		this.ForEntityNames.Add(""RegistrationDocuments"");
+		this.AddMapDefinition(docs => from doc in docs
+			where doc[""@metadata""][""Raven-Entity-Name""] == ""RegistrationDocuments""
+			select new { Email = doc.Email, __document_id = doc.__document_id });
+		this.AddField(""Email"");
+		this.AddField(""__document_id"");
+		this.AddQueryParameterForMap(""Email"");
+		this.AddQueryParameterForMap(""__document_id"");
+		this.AddQueryParameterForReduce(""Email"");
+		this.AddQueryParameterForReduce(""__document_id"");
+	}
+}
+",
+2013-01-04 22:15:39.2140,Raven.Database.Indexing.IndexStorage,Info,Creating index Temp/RegistrationDocuments/ByEmail with encoded name Temp/RegistrationDocuments/ByEmail,
+2013-01-04 22:15:39.2238,Raven.Database.Indexing.Index.Indexing,Debug,Creating index for Temp/RegistrationDocuments/ByEmail,
+2013-01-04 22:15:39.2385,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 5 because: PUT INDEX Temp/RegistrationDocuments/ByEmail,
+2013-01-04 22:15:39.2492,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 5, for: ReducingExecuter, will wait for additional work",
+2013-01-04 22:15:39.2716,Raven.Database.Indexing.Index.Indexing,Debug,"Indexing on RegistrationDocuments/2049 result in index Raven/DocumentsByEntityName gave document: 	__document_id IS: registrationdocuments/2049
+	Tag I-: RegistrationDocuments
+	LastModified I-: 20130105031538835
+",
+2013-01-04 22:15:39.3725,Raven.Database.Indexing.Index.Querying,Debug,Issuing query on index Temp/RegistrationDocuments/ByEmail for: Email:jimmy@codalicio.us,
+2013-01-04 22:15:39.6689,Raven.Database.Indexing.Index.Indexing,Debug,Indexed 3 documents for Raven/DocumentsByEntityName,
+2013-01-04 22:15:39.6708,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 6 because: WORK BY IndexingExecuter,
+2013-01-04 22:15:39.6708,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 6, for: ReducingExecuter, will wait for additional work",
+2013-01-04 22:15:39.6708,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,Found a total of 2 documents that requires indexing since etag: 00000000-0000-0000-0000-000000000000,
+2013-01-04 22:15:39.6708,Raven.Database.Impl.DocumentRetriever,Debug,Triggered Raven.Database.Plugins.Builtins.FilterRavenInternalDocumentsReadTrigger asked us to ignore Raven/Hilo/RegistrationDocuments,
+2013-01-04 22:15:39.6708,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"After read triggers executed, 1 documents remained",
+2013-01-04 22:15:39.6708,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"Going to index 1 documents in IndexName: Temp/RegistrationDocuments/ByEmail, LastIndexedEtag: 00000000-0000-0000-0000-000000000000",
+2013-01-04 22:15:39.6708,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,Indexing 1 documents for index: Temp/RegistrationDocuments/ByEmail. (RegistrationDocuments/2049),
+2013-01-04 22:15:39.6874,Raven.Database.Indexing.Index.Querying,Debug,Issuing query on index Temp/RegistrationDocuments/ByEmail for: Email:jimmy@codalicio.us,
+2013-01-04 22:15:39.6874,Raven.Database.Indexing.Index.Indexing,Debug,"Indexing on RegistrationDocuments/2049 result in index Temp/RegistrationDocuments/ByEmail gave document: 	__document_id IS: registrationdocuments/2049
+	Email I-: jimmy@codalicio.us
+",
+2013-01-04 22:15:39.7020,Raven.Database.Indexing.Index.Indexing,Debug,Indexed 3 documents for Temp/RegistrationDocuments/ByEmail,
+2013-01-04 22:15:39.7020,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 7 because: WORK BY IndexingExecuter,
+2013-01-04 22:15:39.7020,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 7, for: ReducingExecuter, will wait for additional work",
+2013-01-04 22:15:39.7020,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 7, for: IndexingExecuter, will wait for additional work",
+2013-01-04 22:15:39.7899,Raven.Database.Indexing.Index.Querying,Debug,Issuing query on index Temp/RegistrationDocuments/ByEmail for: Email:jimmy@codalicio.us,
+2013-01-04 22:15:39.8221,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'registrationdocuments/2049' was found,
+2013-01-04 22:15:39.8368,Raven.Database.Server.HttpServer,Debug,Request #   6: GET     -   842 ms - <default>  - 200 - /indexes/dynamic/RegistrationDocuments?query=Email%253Ajimmy%2540codalicio.us&start=0&pageSize=1&aggregation=None,
+2013-01-04 22:15:39.8368,Raven.Database.Server.HttpServer,Debug,"	Query: Email:jimmy@codalicio.us
+	Time: 805 ms
+	Index: Temp/RegistrationDocuments/ByEmail
+	Results: 1 returned out of 1 total.
+",
+2013-01-04 22:15:40.1120,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'Raven/Replication/Destinations' was not found,
+2013-01-04 22:15:40.1120,Raven.Database.Server.HttpServer,Debug,Request #   7: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations,
+2013-01-04 22:15:40.1120,Raven.Database.Indexing.Index.Querying,Debug,Issuing query on index Temp/RegistrationDocuments/ByEmail for: Email:jimmy@codalicio.us,
+2013-01-04 22:15:40.1120,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'registrationdocuments/2049' was found,
+2013-01-04 22:15:40.1120,Raven.Database.Server.HttpServer,Debug,Request #   8: GET     -     4 ms - <default>  - 200 - /indexes/dynamic/RegistrationDocuments?query=Email%253Ajimmy%2540codalicio.us&start=0&pageSize=1&aggregation=None,
+2013-01-04 22:15:40.1120,Raven.Database.Server.HttpServer,Debug,"	Query: Email:jimmy@codalicio.us
+	Time: 3 ms
+	Index: Temp/RegistrationDocuments/ByEmail
+	Results: 1 returned out of 1 total.
+",
+2013-01-04 22:15:40.1286,Raven.Database.DocumentDatabase,Debug,Delete a document with key: RegistrationDocuments/2049 and etag ,
+2013-01-04 22:15:40.1286,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'RegistrationDocuments/2049' was deleted,
+2013-01-04 22:15:40.1500,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 8 because: DEL RegistrationDocuments/2049,
+2013-01-04 22:15:40.1500,Raven.Database.DocumentDatabase,Debug,Successfully executed 1 commands in 00:00:00.0246538,
+2013-01-04 22:15:40.1500,Raven.Database.Server.HttpServer,Debug,Request #   9: POST    -    26 ms - <default>  - 200 - /bulk_docs,
+2013-01-04 22:15:40.1500,Raven.Database.Server.HttpServer,Debug,"	DELETE RegistrationDocuments/2049
+",
+2013-01-04 22:15:40.1500,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 8, for: ReducingExecuter, will wait for additional work",
+2013-01-04 22:15:40.1822,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"Executing Index: Raven/DocumentsByEntityName, Keys: RegistrationDocuments/2049",
+2013-01-04 22:15:40.1861,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'RegistrationDocuments/2049' was not found,
+2013-01-04 22:15:40.1861,Raven.Database.Indexing.Index.Indexing,Debug,Deleting (RegistrationDocuments/2049) from Raven/DocumentsByEntityName,
+2013-01-04 22:15:40.2193,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"Executing Index: Temp/RegistrationDocuments/ByEmail, Keys: RegistrationDocuments/2049",
+2013-01-04 22:15:40.2193,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'RegistrationDocuments/2049' was not found,
+2013-01-04 22:15:40.2193,Raven.Database.Indexing.Index.Indexing,Debug,Deleting (RegistrationDocuments/2049) from Temp/RegistrationDocuments/ByEmail,
+2013-01-04 22:15:40.2193,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 9 because: WORK BY IndexingExecuter,
+2013-01-04 22:15:40.2193,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 9, for: IndexingExecuter, will wait for additional work",
+2013-01-04 22:15:40.2193,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 9, for: ReducingExecuter, will wait for additional work",
+2013-01-04 22:15:42.3314,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'Raven/Hilo/RegistrationDocuments' was found,
+2013-01-04 22:15:42.3314,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'Raven/ServerPrefixForHilo' was not found,
+2013-01-04 22:15:42.3314,Raven.Database.Server.HttpServer,Debug,Request #  10: GET     -     1 ms - <default>  - 200 - /queries/?&id=Raven/Hilo/RegistrationDocuments&id=Raven/ServerPrefixForHilo,
+2013-01-04 22:15:42.3314,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'Raven/Replication/Destinations' was not found,
+2013-01-04 22:15:42.3314,Raven.Database.Server.HttpServer,Debug,Request #  11: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations,
+2013-01-04 22:15:42.4934,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,"Inserted a new document with key 'Raven/Hilo/RegistrationDocuments', update: True, ",
+2013-01-04 22:15:42.4934,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 10 because: PUT Raven/Hilo/RegistrationDocuments,
+2013-01-04 22:15:42.4934,Raven.Database.DocumentDatabase,Debug,Put document Raven/Hilo/RegistrationDocuments with etag 00000000-0000-0800-0000-000000000003,
+2013-01-04 22:15:42.4934,Raven.Database.Server.HttpServer,Debug,Request #  12: PUT     -     2 ms - <default>  - 201 - /docs/Raven/Hilo/RegistrationDocuments,
+2013-01-04 22:15:42.4934,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,Found a total of 1 documents that requires indexing since etag: 00000000-0000-0800-0000-000000000002,
+2013-01-04 22:15:42.4934,Raven.Database.Impl.DocumentRetriever,Debug,Triggered Raven.Database.Plugins.Builtins.FilterRavenInternalDocumentsReadTrigger asked us to ignore Raven/Hilo/RegistrationDocuments,
+2013-01-04 22:15:42.4934,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"After read triggers executed, 0 documents remained",
+2013-01-04 22:15:42.4934,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"All documents have been filtered for Raven/DocumentsByEntityName, no indexing will be performed, updating to 00000000-0000-0800-0000-000000000003, 1/5/2013 3:15:42 AM",
+2013-01-04 22:15:42.4934,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"All documents have been filtered for Temp/RegistrationDocuments/ByEmail, no indexing will be performed, updating to 00000000-0000-0800-0000-000000000003, 1/5/2013 3:15:42 AM",
+2013-01-04 22:15:42.4983,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 10, for: ReducingExecuter, will wait for additional work",
+2013-01-04 22:15:42.4983,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 11 because: WORK BY IndexingExecuter,
+2013-01-04 22:15:42.4983,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 11, for: IndexingExecuter, will wait for additional work",
+2013-01-04 22:15:42.4983,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 11, for: ReducingExecuter, will wait for additional work",
+2013-01-04 22:15:42.6565,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,"Inserted a new document with key 'RegistrationDocuments/2081', update: False, ",
+2013-01-04 22:15:42.6565,Raven.Database.DocumentDatabase,Debug,Put document RegistrationDocuments/2081 with etag 00000000-0000-0800-0000-000000000004,
+2013-01-04 22:15:42.6565,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 12 because: PUT RegistrationDocuments/2081,
+2013-01-04 22:15:42.6565,Raven.Database.DocumentDatabase,Debug,Successfully executed 1 commands in 00:00:00.0008100,
+2013-01-04 22:15:42.6565,Raven.Database.Server.HttpServer,Debug,Request #  13: POST    -     1 ms - <default>  - 200 - /bulk_docs,
+2013-01-04 22:15:42.6565,Raven.Database.Server.HttpServer,Debug,"	PUT RegistrationDocuments/2081
+",
+2013-01-04 22:15:42.6565,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,Found a total of 1 documents that requires indexing since etag: 00000000-0000-0800-0000-000000000003,
+2013-01-04 22:15:42.6565,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"After read triggers executed, 1 documents remained",
+2013-01-04 22:15:42.6565,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"Going to index 1 documents in IndexName: Raven/DocumentsByEntityName, LastIndexedEtag: 00000000-0000-0800-0000-000000000003",
+2013-01-04 22:15:42.6565,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"Going to index 1 documents in IndexName: Temp/RegistrationDocuments/ByEmail, LastIndexedEtag: 00000000-0000-0800-0000-000000000003",
+2013-01-04 22:15:42.6565,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,Indexing 1 documents for index: Raven/DocumentsByEntityName. (RegistrationDocuments/2081),
+2013-01-04 22:15:42.6565,Raven.Database.Indexing.Index.Indexing,Debug,"Indexing on RegistrationDocuments/2081 result in index Raven/DocumentsByEntityName gave document: 	__document_id IS: registrationdocuments/2081
+	Tag I-: RegistrationDocuments
+	LastModified I-: 20130105031542656
+",
+2013-01-04 22:15:42.6565,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,Indexing 1 documents for index: Temp/RegistrationDocuments/ByEmail. (RegistrationDocuments/2081),
+2013-01-04 22:15:42.6565,Raven.Database.Indexing.Index.Indexing,Debug,"Indexing on RegistrationDocuments/2081 result in index Temp/RegistrationDocuments/ByEmail gave document: 	__document_id IS: registrationdocuments/2081
+	Email I-: jimmy@codalicio.us
+",
+2013-01-04 22:15:42.6565,Raven.Database.Indexing.Index.Indexing,Debug,Indexed 3 documents for Temp/RegistrationDocuments/ByEmail,
+2013-01-04 22:15:42.6565,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 12, for: ReducingExecuter, will wait for additional work",
+2013-01-04 22:15:42.6877,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'Raven/Replication/Destinations' was not found,
+2013-01-04 22:15:42.6877,Raven.Database.Server.HttpServer,Debug,Request #  14: GET     -     1 ms - <default>  - 404 - /docs/Raven/Replication/Destinations,
+2013-01-04 22:15:42.7023,Raven.Database.Indexing.Index.Indexing,Debug,Indexed 3 documents for Raven/DocumentsByEntityName,
+2013-01-04 22:15:42.7023,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 13 because: WORK BY IndexingExecuter,
+2013-01-04 22:15:42.7023,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 13, for: IndexingExecuter, will wait for additional work",
+2013-01-04 22:15:42.7023,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 13, for: ReducingExecuter, will wait for additional work",
+2013-01-04 22:15:42.7901,Raven.Database.Indexing.Index.Querying,Debug,Issuing query on index Temp/RegistrationDocuments/ByEmail for: Email:jimmy@codalicio.us,
+2013-01-04 22:15:42.7901,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'registrationdocuments/2081' was found,
+2013-01-04 22:15:42.7901,Raven.Database.Server.HttpServer,Debug,Request #  15: GET     -     2 ms - <default>  - 200 - /indexes/dynamic/RegistrationDocuments?query=Email%253Ajimmy%2540codalicio.us&start=0&pageSize=1&aggregation=None,
+2013-01-04 22:15:42.7901,Raven.Database.Server.HttpServer,Debug,"	Query: Email:jimmy@codalicio.us
+	Time: 1 ms
+	Index: Temp/RegistrationDocuments/ByEmail
+	Results: 1 returned out of 1 total.
+",
+2013-01-04 22:15:43.0478,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'Raven/Replication/Destinations' was not found,
+2013-01-04 22:15:43.0478,Raven.Database.Server.HttpServer,Debug,Request #  16: GET     -     0 ms - <default>  - 404 - /docs/Raven/Replication/Destinations,
+2013-01-04 22:15:43.0478,Raven.Database.Indexing.Index.Querying,Debug,Issuing query on index Temp/RegistrationDocuments/ByEmail for: Email:jimmy@codalicio.us,
+2013-01-04 22:15:43.0478,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'registrationdocuments/2081' was found,
+2013-01-04 22:15:43.0478,Raven.Database.Server.HttpServer,Debug,Request #  17: GET     -     1 ms - <default>  - 200 - /indexes/dynamic/RegistrationDocuments?query=Email%253Ajimmy%2540codalicio.us&start=0&pageSize=1&aggregation=None,
+2013-01-04 22:15:43.0478,Raven.Database.Server.HttpServer,Debug,"	Query: Email:jimmy@codalicio.us
+	Time: 1 ms
+	Index: Temp/RegistrationDocuments/ByEmail
+	Results: 1 returned out of 1 total.
+",
+2013-01-04 22:15:43.0478,Raven.Database.DocumentDatabase,Debug,Delete a document with key: RegistrationDocuments/2081 and etag ,
+2013-01-04 22:15:43.0478,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'RegistrationDocuments/2081' was deleted,
+2013-01-04 22:15:43.0478,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 14 because: DEL RegistrationDocuments/2081,
+2013-01-04 22:15:43.0478,Raven.Database.DocumentDatabase,Debug,Successfully executed 1 commands in 00:00:00.0009852,
+2013-01-04 22:15:43.0478,Raven.Database.Server.HttpServer,Debug,Request #  18: POST    -     2 ms - <default>  - 200 - /bulk_docs,
+2013-01-04 22:15:43.0615,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"Executing Index: Raven/DocumentsByEntityName, Keys: RegistrationDocuments/2081",
+2013-01-04 22:15:43.0615,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'RegistrationDocuments/2081' was not found,
+2013-01-04 22:15:43.0615,Raven.Database.Indexing.Index.Indexing,Debug,Deleting (RegistrationDocuments/2081) from Raven/DocumentsByEntityName,
+2013-01-04 22:15:43.0615,Raven.Database.Server.HttpServer,Debug,"	DELETE RegistrationDocuments/2081
+",
+2013-01-04 22:15:43.0615,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 14, for: ReducingExecuter, will wait for additional work",
+2013-01-04 22:15:43.0615,Raven.Database.Indexing.AbstractIndexingExecuter,Debug,"Executing Index: Temp/RegistrationDocuments/ByEmail, Keys: RegistrationDocuments/2081",
+2013-01-04 22:15:43.0615,Raven.Storage.Esent.StorageActions.DocumentStorageActions,Debug,Document with key 'RegistrationDocuments/2081' was not found,
+2013-01-04 22:15:43.0615,Raven.Database.Indexing.Index.Indexing,Debug,Deleting (RegistrationDocuments/2081) from Temp/RegistrationDocuments/ByEmail,
+2013-01-04 22:15:43.0615,Raven.Database.Indexing.WorkContext,Debug,Incremented work counter to 15 because: WORK BY IndexingExecuter,
+2013-01-04 22:15:43.0771,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 15, for: IndexingExecuter, will wait for additional work",
+2013-01-04 22:15:43.0771,Raven.Database.Indexing.WorkContext,Debug,"No work was found, workerWorkCounter: 15, for: ReducingExecuter, will wait for additional work",

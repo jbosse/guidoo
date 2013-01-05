@@ -17,7 +17,7 @@ namespace Website.App
 
         public string FindByEmail(string email)
         {
-            using (var session = new DocumentStore { Url = "http://localhost:8080" }.Initialize().OpenSession())
+            using (var session = new DocumentStore { ConnectionStringName = "RavenHQ" }.Initialize().OpenSession())
             {
                 var registrationDocument = (from d in session.Query<RegistrationDocument>()
                                             where d.Email == email
