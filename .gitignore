@@ -6,3 +6,5 @@ _[Rr]eSharper*
 *.resharper*
 *.ncrunch*
 *.crunchsolution*
+packages/*
+!packages/repositories.config
