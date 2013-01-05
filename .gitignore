@@ -5,6 +5,8 @@ _[Rr]eSharper*
 *.suo
 *.resharper*
 *.ncrunch*
+!.ncrunchproject
+!.ncrunchsolution
 *.crunchsolution*
 packages/*
 !packages/repositories.config
