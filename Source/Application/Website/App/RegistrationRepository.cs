@@ -1,33 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using ServiceStack.CacheAccess;
+﻿using System.Linq;
+using Raven.Client.Document;
+using Raven.Client.Linq;
 
 namespace Website.App
 {
     public class RegistrationRepository : IRegistrationRepository
     {
-        private List<RegistrationDocument> Regisrations
-        {
-            get
-            {
-                var reg = Session.Get<List<RegistrationDocument>>("registration");
-                return reg ?? new List<RegistrationDocument>();
-            }
-        }
-
-        public ISession Session { get; set; }
-
         public void Add(string email, string guid)
         {
-            var reg = Regisrations;
-            reg.Add(new RegistrationDocument {Email = email, Guid = guid});
-            Session.Set("registration", reg);
+            using (var session = new DocumentStore { ConnectionStringName = "RavenHQ" }.Initialize().OpenSession())
+            {
+                session.Store(new RegistrationDocument { Email = email, Guid = guid });
+                session.SaveChanges();
+            }
         }
 
         public string FindByEmail(string email)
         {
-            var registrationDocument = Regisrations.Find(r => r.Email == email);
-            return registrationDocument == null ? null : registrationDocument.Guid;
+            using (var session = new DocumentStore { Url = "http://localhost:8080" }.Initialize().OpenSession())
+            {
+                var registrationDocument = (from d in session.Query<RegistrationDocument>()
+                                            where d.Email == email
+                                            select d).FirstOrDefault();
+                return registrationDocument == null ? null : registrationDocument.Guid;
+            }
         }
     }
 }

@@ -54,6 +54,13 @@ namespace Website.Test
             and_the_registration_has_an_email("jimmy@codalicio.us");
             when_the_request_is_posted_to_the_service();
             then_an_excpetion_should_have_been_thrown(HttpStatusCode.Conflict);
+            and_the_exception_message_should_be("The email is already registered.");
+        }
+
+        private void and_the_exception_message_should_be(string message)
+        {
+            var exception = (HttpError)_testContext.Exception;
+            Assert.That(exception.Message, Is.EqualTo(message));
         }
 
         private void then_an_excpetion_should_have_been_thrown(HttpStatusCode statusCode)

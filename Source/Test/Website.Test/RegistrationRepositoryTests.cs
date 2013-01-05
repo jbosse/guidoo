@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
+﻿using System.Dynamic;
+using System.Linq;
 using NUnit.Framework;
-using ServiceStack.CacheAccess;
+using Raven.Client.Document;
+using Raven.Client.Linq;
 using Website.App;
 
 namespace Website.Test
@@ -12,15 +12,26 @@ namespace Website.Test
     {
         private IRegistrationRepository _sut;
         private dynamic _testContext;
-        private ISession _session;
 
         [SetUp]
         public void SetUp()
         {
-            _session = new Session();
             _testContext = new ExpandoObject();
             _sut = new RegistrationRepository();
-            ((RegistrationRepository)_sut).Session = _session;
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            string email = _testContext.Email;
+            using (var session = new DocumentStore { Url = "http://localhost:8080" }.Initialize().OpenSession())
+            {
+                var registrationDocument = (from d in session.Query<RegistrationDocument>()
+                                            where d.Email == email
+                                            select d).FirstOrDefault();
+                session.Delete(registrationDocument);
+                session.SaveChanges();
+            }
         }
 
         [Test]
@@ -43,40 +54,8 @@ namespace Website.Test
 
         private void given_a_registration_has_been_added_with(string email, string guid)
         {
+            _testContext.Email = email;
             _sut.Add(email, guid);
-        }
-
-        private class Session : ISession
-        {
-            public Session()
-            {
-                _session = new Dictionary<string, object>();
-            }
-            private readonly Dictionary<string, object> _session;
-
-            public void Set<T>(string key, T value)
-            {
-                _session.Add(key, value);
-            }
-
-            public T Get<T>(string key)
-            {
-                if (_session.ContainsKey(key))
-                {
-                    return (T) _session[key];
-                }
-                return default(T);
-            }
-
-            public object this[string key]
-            {
-                set
-                {
-                    if (value == null) throw new ArgumentNullException("value");
-                    _session.Add(key, this);
-                }
-                get { return _session[key]; }
-            }
         }
     }
 }

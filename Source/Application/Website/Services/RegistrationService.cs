@@ -13,18 +13,14 @@ namespace Website.Services
         public RegistrationService(IGuidFactory guidFactory, IRegistrationRepository registrationRepository)
         {
             _guidFactory = guidFactory;
-            _registrationRepository = registrationRepository ?? new RegistrationRepository();
+            _registrationRepository = registrationRepository;
         }
 
         public object Post(Registration registration)
         {
-            if (_registrationRepository.GetType() == typeof(RegistrationRepository))
-            {
-                ((RegistrationRepository)_registrationRepository).Session = Session;
-            }
             if (_registrationRepository.FindByEmail(registration.Email) != null)
             {
-                throw new HttpError(HttpStatusCode.Conflict, "error");
+                throw new HttpError(HttpStatusCode.Conflict, "The email is already registered.");
             }
             var guid = _guidFactory.Create();
             _registrationRepository.Add(registration.Email, guid.ToString());
