@@ -67,9 +67,8 @@
                         var email = $('#email').hide().val();
                         $.ajax({
                             url: 'registration',
-                            data: JSON.stringify({ Email: email }),
+                            data: { Email: email },
                             type: 'POST',
-                            contentType: 'application/json, charset=utf-8',
                             dataType: 'json'
                         }).
                             done(function(result) {
