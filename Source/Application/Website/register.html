@@ -46,7 +46,7 @@
                 <!-- Main hero unit for a primary marketing message or call to action -->
                 <h1 id="hero_title">register</h1>
                 <p id="confirm_message" style="display:none">Congratulations! Here is your globally unique identifier.</p>
-                <p id="already_message" style="display:none">Oh Noes! This email has already been registered.</p>
+                <p id="already_message" style="display:none">Oh Noes! <span id="oh_noes_reason"></span></p>
                 <p><input type="text" id="email" class="input-block-level" placeholder="Email Address"/></p>
                 <p><a id="register_button" class="btn btn-primary btn-large">Register</a></p>
             </div>
@@ -59,33 +59,36 @@
         </div>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script src="/js/bootstrap.js"></script>
+        <script src="/js/JsonServiceClient.js"></script>
         <script>
-            (function($, window, undefined) {
-                $(function() {
+            (function($, JsonServiceClient, window, undefined) {
+                $(function () {
+
+                    function registrationFailed(response) {
+                        $('#oh_noes_reason').html(response.ResponseStatus.Message);
+                        $('#confirm_message').hide();
+                        $('#already_message').show();
+                        $('#register_button').show();
+                    }
+
+                    function registrationSucceeded(response) {
+                        $('#hero_title').text(response.Guid).addClass('registered');
+                        $('#confirm_message').show();
+                        $('#already_message').hide();
+                    }
+
+                    function register(email) {
+                        var client = new JsonServiceClient('/');
+                        client.postToService('registration', { Email: email }, registrationSucceeded, registrationFailed);
+                    }
+                    
                     $('#register_button').on('click', null, function () {
                         $('#register_button').hide();
                         var email = $('#email').hide().val();
-                        $.ajax({
-                            url: 'registration',
-                            data: { Email: email },
-                            type: 'POST',
-                            dataType: 'json'
-                        }).
-                            done(function(result) {
-                                $('#hero_title').text(result.Guid).addClass('registered');
-                                $('#confirm_message').show();
-                                $('#already_message').hide();
-                            }).
-                            fail(function(result) {
-                                var response = JSON.parse(result.responseText);
-                                $('#email').show().focus().select();
-                                $('#confirm_message').hide();
-                                $('#already_message').show();
-                                $('#register_button').show();
-                            });
+                        register(email);
                     });
                 });
-            })(jQuery, window);
+            })(jQuery, JsonServiceClient, window);
         </script>
     </body>
 </html>

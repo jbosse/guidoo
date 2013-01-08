@@ -47,16 +47,6 @@ namespace Website.Test
             then_the_repository_should_have_saved("jimmy@codalicio.us", "e903fc3f-7022-4e50-868f-8bda9c448472");
         }
 
-        [Test]
-        public void it_should_throw_an_exception_if_email_is_already_registered()
-        {
-            given_there_is_already_a_registration_for_email("jimmy@codalicio.us");
-            and_the_registration_has_an_email("jimmy@codalicio.us");
-            when_the_request_is_posted_to_the_service();
-            then_an_excpetion_should_have_been_thrown(HttpStatusCode.Conflict);
-            and_the_exception_message_should_be("The email is already registered.");
-        }
-
         private void and_the_exception_message_should_be(string message)
         {
             var exception = (HttpError)_testContext.Exception;

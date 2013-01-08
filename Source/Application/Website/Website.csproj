@@ -118,6 +118,7 @@
     <Compile Include="App\Registration.cs" />
     <Compile Include="App\RegistrationRepository.cs" />
     <Compile Include="App\RegistrationResult.cs" />
+    <Compile Include="App\RegistrationValidation.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -127,7 +128,9 @@
     <Compile Include="Services\RegistrationService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,6 +1,4 @@
-﻿using System.Net;
-using ServiceStack.Common.Web;
-using ServiceStack.ServiceInterface;
+﻿using ServiceStack.ServiceInterface;
 using Website.App;
 
 namespace Website.Services
@@ -18,10 +16,6 @@ namespace Website.Services
 
         public object Post(Registration registration)
         {
-            if (_registrationRepository.FindByEmail(registration.Email) != null)
-            {
-                throw new HttpError(HttpStatusCode.Conflict, "The email is already registered.");
-            }
             var guid = _guidFactory.Create().ToString("D");
             _registrationRepository.Add(registration.Email, guid);
             return new RegistrationResult { Guid = guid };

@@ -14,8 +14,8 @@ namespace Website.App
             container.RegisterAutoWiredAs<RegistrationRepository, IRegistrationRepository>();
             container.RegisterAutoWiredAs<GuidFactory, IGuidFactory>();
 
-            //Plugins.Add(new ValidationFeature());
-            //container.RegisterValidators(typeof (Global).Assembly);
+            Plugins.Add(new ValidationFeature());
+            container.RegisterValidators(typeof (Global).Assembly);
         }
     }
 }

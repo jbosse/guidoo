@@ -81,11 +81,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegistrationRepositoryTests.cs" />
     <Compile Include="RegistrationServiceTests.cs" />
+    <Compile Include="RegistrationValidationTests.cs" />
     <Compile Include="SetupFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Application\Website\Website.csproj">
